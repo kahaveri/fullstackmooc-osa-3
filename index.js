@@ -61,6 +61,23 @@ app.post('/api/persons', (request, response) => {
     const person = request.body
     person.id = id
 
+    if (!person.name) {
+        return response.status(400).json({
+            error: 'name missing'
+        })
+    }
+    if (!person.number) {
+        return response.status(400).json({
+            error: 'number missing'
+        })
+    }
+    const samename = persons.find(p => p.name === person.name)
+    if (samename) {
+        return response.status(400).json({
+            error: 'a person with the same name is already in the phonebook'
+        })
+    }
+
     persons = persons.concat(person)
 
     response.json(person)
